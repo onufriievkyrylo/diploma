@@ -5,10 +5,10 @@
 int main() {
   auto graph = new MatrixGraph<std::string, std::string>();
   for(int i(13); i > 0; --i)
-    graph->addVertex(std::to_string(i));
-  graph->addVertex("asd");
+    graph->add(std::to_string(i));
+  graph->add("asd");
   graph->print();
-  graph->removeVertex("asd");
+  graph->remove("asd");
   graph->print();
   graph->resize(5);
   graph->print();
