@@ -10,8 +10,8 @@ int main() {
   graph->print();
   graph->remove("asd");
   graph->print();
-  graph->connect("1", "3", "***");
-  graph->resize(5);
-  graph->print();
+  // graph->connect("1", "3", "***");
+  // graph->resize(5);
+  // graph->print();
   return 0;
 }
