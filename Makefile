@@ -1,2 +1,2 @@
-all: main.cc 
-	g++ main.cc -o main -std=c++1z
+graphs: ./graphs/examples/main.cc
+	g++ ./graphs/examples/main.cc -o ./graphs/bin/app -std=c++1z
