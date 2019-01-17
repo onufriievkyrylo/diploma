@@ -17,12 +17,12 @@ int main() {
     ->add("Kropyvnytskyi")
     ->add("Mykolaiv")
     ->add("Kherson")
-    ->add("Simforopol")
+    ->add("Simferopol")
     ->add("Zhytomyr")
     ->add("Vinnytsia")
     ->add("Odessa")
     ->add("Rivne")
-    ->add("Khmelnytski")
+    ->add("Khmelnytskyi")
     ->add("Chernivtsi")
     ->add("Lutsk")
     ->add("Lviv")
@@ -59,31 +59,23 @@ int main() {
     ->connect("Kropyvnytskyi", "Vinnytsia", 329)->connect("Vinnytsia", "Kropyvnytskyi", 329)
     ->connect("Mykolaiv", "Odessa", 132)->connect("Odessa", "Mykolaiv", 132)
     ->connect("Mykolaiv", "Kherson", 69)->connect("Kherson", "Mykolaiv", 69)
-    ->connect("Zhytomyr", "Vinnytsia", 277)->connect("Vinnytsia", "Zhytomyr", 277);
-    ->connect("Zhytomyr", "Khmelnytskyi", 277)->connect("Khmelnytskyi", "Zhytomyr", 277)
-    ->connect("Zhytomyr", "Rivne", 277)->connect("Rivne", "Zhytomyr", 277)
     ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-    ->connect("Simferopol", "Kherson", 277)->connect("Kherson", "Simferopol", 277)
-
-
-
-
-    
-
-  graph->connect("1", "3", 2424);
+    ->connect("Zhytomyr", "Vinnytsia", 128)->connect("Vinnytsia", "Zhytomyr", 128)
+    ->connect("Zhytomyr", "Khmelnytskyi", 189)->connect("Khmelnytskyi", "Zhytomyr", 188)
+    ->connect("Zhytomyr", "Rivne", 188)->connect("Rivne", "Zhytomyr", 188)
+    ->connect("Vinnytsia", "Khmelnytskyi", 119)->connect("Khmelnytskyi", "Vinnytsia", 119)
+    ->connect("Khmelnytskyi", "Chernivtsi", 187)->connect("Chernivtsi", "Khmelnytskyi", 187)
+    ->connect("Khmelnytskyi", "Ternopil", 111)->connect("Kherson", "Khmelnytskyi", 111)
+    ->connect("Rivne", "Lutsk", 73)->connect("Lutsk", "Rivne", 73)
+    ->connect("Rivne", "Ternopil", 159)->connect("Ternopil", "Rivne", 159)
+    ->connect("Rivne", "Lviv", 211)->connect("Lviv", "Rivne", 211)
+    ->connect("Chernivtsi", "Ternopil", 172)->connect("Ternopil", "Chernivtsi", 172)
+    ->connect("Chernivtsi", "Ivano-Frankivsk", 135)->connect("Ivano-Frankivsk", "Chernivtsi", 135)
+    ->connect("Ternopil", "Lviv", 137)->connect("Lviv", "Ternopil", 137)
+    ->connect("Lutsk", "Lviv", 151)->connect("Lviv", "Lutsk", 151)
+    ->connect("Lutsk", "Ternopil", 168)->connect("Ternopil", "Lutsk", 168)
+    ->connect("Lviv", "Uzhhorod", 420)->connect("Uzhhorod", "Lviv", 420)
+    ->connect("Ternopil", "Ivano-Frankivsk", 134)->connect("Ivano-Frankivsk", "Ternopil", 134);
   graph->print();
   return 0;
 }
