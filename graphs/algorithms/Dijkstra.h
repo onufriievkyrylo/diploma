@@ -1,29 +1,48 @@
 #ifndef ABSTRACT_DIJKSTRA_H_
 #define ABSTRACT_DIJKSTRA_H_
 
-#include "../GraphPath.h"
+#include <vector>
 
-template <class S, class W>
+/**
+ * @tparam V vertex type
+ * @tparam E edge's weight type
+ */
+template <class V, class E>
+struct DijkstraPath {
+  V* from;
+  V* to;
+  E weight;
+  std::vector<V*> path;
+};
+
+/**
+ * @tparam S source type
+ * @tparam E edge's weight type
+ */
+template <class S, class E>
 struct DijkstraNode {
-  S* source;
-  W weight;
+  S source;
+  E weight;
   bool visited = false;
 };
 
-template <class V>
+/**
+ * @tparam V vertex type
+ * @tparam E edge's weight type
+ */
+template <class V, class E>
 class AbstractDijkstra {
   public:
   /**
-     * @params
-     *  from - graph vertex start position
-     * @return array of verticies that present path or nullptr if path doesn't exist
-     */
-  virtual GraphPath<V> *dijkstra_single_source(V from) = 0;
+   * @param source graph vertex start position
+   * @return array of all paths to source
+   */
+  virtual DijkstraPath<V, E>* dijkstra_single_source(V source) = 0;
   /**
-     * @params
-     *  from, to - graph verticies beetwen path should be found
-     * @return array of verticies that present path or nullptr if path doesn't exist
-     */
+   * @params
+   *  from, to - graph verticies beetwen path should be found
+   * @return array of verticies that present path or nullptr if path doesn't exist
+   */
   // virtual V* dijkstra_double_source(V from, V to) = 0;
 };
 

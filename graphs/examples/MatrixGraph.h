@@ -12,28 +12,28 @@
 #include "../algorithms/Dijkstra.h"
 
 template <class V, class E>
-class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V> {
+class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
   private:
   std::vector<V> verticies;
   std::vector<std::vector<std::optional<E>>> edges;
   public:
-  template <class W, W start_weight>
-  GraphPath<V> *dijkstra_single_source(V source, std::function<W(E &edge)> cast) {
+  DijkstraPath<V, E>* dijkstra_single_source(V source) {
+    size_t vertex_count = size();
     int source_index = index_of(source);
     if (source_index < 0)
       throw std::logic_error("vertex 'from' not found");
-    auto map = vector<DijkstraNode<int, W>>(size());
-    map[source_index].weight = start_weight;
-    for (int step = 0; step < size() - 1; ++step) {
+    std::vector<DijkstraNode<int, E>> map(vertex_count);
+    map[source_index].weight = 0;
+    for (int step = 0; step < vertex_count - 1; ++step) {
       int min_index = std::distance(map.begin(), std::min_element(map.begin(), map.end(),
-        [](const DijkstraNode<int, > &l, const DijkstraNode<int> &r) -> bool {
+        [](const DijkstraNode<int, E> &l, const DijkstraNode<int, E> &r) -> bool {
           return !l.visited && l.weight < r.weight;
         }
       ));
       map[min_index].visited = true;
-      for (int neighbour_index = 0; neighbour_index < size(); ++neighbour_index) {
+      for (int neighbour_index = 0; neighbour_index < vertex_count; ++neighbour_index) {
         if (edges[min_index][neighbour_index].has_value() && !map[neighbour_index].visited) {
-          W weight = map[min_index].weight + cast(edges[min_index][neighbour_index].value());
+          E weight = map[min_index].weight + edges[min_index][neighbour_index].value();
           if (weight < map[neighbour_index].weight) {
             map[neighbour_index].weight = weight;
             map[neighbour_index].source = min_index;
@@ -41,12 +41,21 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V> {
         }
       }
     }
-    std::vector<GraphPath<V>> paths;
-    for (int to_index = 0; step < current_size - 1; ++step)
-    {
-      GraphPath path();
+    auto paths = new DijkstraPath<V, E>[vertex_count];
+    for (int to_index = 0; to_index < vertex_count; ++to_index) {
+      DijkstraPath<V, E> graph_path;
+      graph_path.from = &verticies[source_index];
+      graph_path.to = &verticies[to_index];
+      graph_path.weight = map[to_index].weight;
+      int from_index = map[to_index].source;
+      while (from_index != source_index) {
+        graph_path.path.push_back(&verticies[from_index]);
+        from_index = map[from_index].source;
+      }
+      graph_path.path.push_back(&verticies[source_index]);
+      paths[to_index] = graph_path;
     }
-    return;
+    return paths;
   }
   MatrixGraph* add(V vertex) {
     if (contains(vertex)) throw std::logic_error("vertex already added");
@@ -127,7 +136,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V> {
     std::cout << size() << ' ' << std::endl;
     for (int i(0); i < size(); ++i) {
       for (int j(0); j < size(); ++j) {
-        std::cout << verticies[i] << '|' << verticies[j] << '|' << edges[i][j].value_or("?") << ' ';
+        std::cout << verticies[i] << '|' << verticies[j] << '|' << edges[i][j].value_or(-1) << ' ';
       }
       std::cout << std::endl;
     }
