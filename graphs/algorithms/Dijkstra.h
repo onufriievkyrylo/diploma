@@ -24,6 +24,7 @@ struct DijkstraNode {
   S source;
   E weight;
   bool visited = false;
+  bool determined = false;
 };
 
 /**

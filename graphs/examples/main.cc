@@ -76,6 +76,16 @@ int main() {
     ->connect("Lutsk", "Ternopil", 168)->connect("Ternopil", "Lutsk", 168)
     ->connect("Lviv", "Uzhhorod", 420)->connect("Uzhhorod", "Lviv", 420)
     ->connect("Ternopil", "Ivano-Frankivsk", 134)->connect("Ivano-Frankivsk", "Ternopil", 134);
-  graph->print();
+
+  auto paths = graph->dijkstra_single_source("Kharkiv");
+
+  int i = 13;
+
+  // for (int i(0); i < graph->size(); ++i) {
+  //   std::cout << i << " " << *(paths[i].from) << " - " << *(paths[i].to) << " " << paths[i].weight << std::endl;
+
+  // }
+  std::cout << *(paths[i].from) << " - " << *(paths[i].to) << " " << paths[i].weight << " " << paths[i].path.size() << std::endl;
+
   return 0;
 }
