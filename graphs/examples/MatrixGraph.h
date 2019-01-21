@@ -23,34 +23,28 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     if (source_index < 0)
       throw std::logic_error("vertex 'from' not found");
     std::vector<DijkstraNode<int, E>> map(vertex_count);
-    map[source_index].weight = 0;
+    map[source_index].source = source_index;
     map[source_index].determined = true;
     for (int step = 0; step < vertex_count - 1; ++step) {
       int min_index = std::distance(map.begin(), std::min_element(map.begin(), map.end(),
         [](const DijkstraNode<int, E> &l, const DijkstraNode<int, E> &r) -> bool {
-          return !l.visited && (l.weight < r.weight || (l.determined && !r.determined));
+          return l.visited || r.visited ? r.visited && !l.visited
+            : !l.determined || !r.determined ? !r.determined
+            : l.weight <= r.weight;
         }
       ));
-      std::cout << verticies[min_index] << " - " << map[min_index].weight << " | " << min_index << " " << map[min_index].visited << std::endl;
       map[min_index].visited = true;
       for (int neighbour_index = 0; neighbour_index < vertex_count; ++neighbour_index) {
         if (edges[min_index][neighbour_index].has_value() && !map[neighbour_index].visited) {
           E weight = map[min_index].weight + edges[min_index][neighbour_index].value();
-          // std::cout << weight << " weight ";
           if (!map[neighbour_index].determined || weight < map[neighbour_index].weight) {
-            std::cout << neighbour_index << " ";
             map[neighbour_index].determined = true;
             map[neighbour_index].weight = weight;
             map[neighbour_index].source = min_index;
           }
         }
       }
-      std::cout << std::endl;
     }
-    // for(auto a : map) {
-    //   std::cout << a.source << " - "  << a.weight << " | " << a.visited << std::endl;
-    // }
-
     auto paths = new DijkstraPath<V, E>[vertex_count];
     for (int to_index = 0; to_index < vertex_count; ++to_index) {
       DijkstraPath<V, E> graph_path;
@@ -58,13 +52,10 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
       graph_path.to = &verticies[to_index];
       graph_path.weight = map[to_index].weight;
       int from_index = map[to_index].source;
-      // std::cout << source << source_index << map.size() << from_index << map[from_index].source;
-      // return nullptr;
       while (from_index != source_index) {
-        graph_path.path.push_back(&verticies[from_index]);
+        graph_path.path.insert(graph_path.path.begin(), &verticies[from_index]);
         from_index = map[from_index].source;
       }
-      graph_path.path.push_back(&verticies[source_index]);
       paths[to_index] = graph_path;
     }
     return paths;

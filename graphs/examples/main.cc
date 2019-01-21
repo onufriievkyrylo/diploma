@@ -79,13 +79,16 @@ int main() {
 
   auto paths = graph->dijkstra_single_source("Kharkiv");
 
-  int i = 13;
+  // int i = 13;
 
-  // for (int i(0); i < graph->size(); ++i) {
-  //   std::cout << i << " " << *(paths[i].from) << " - " << *(paths[i].to) << " " << paths[i].weight << std::endl;
-
-  // }
-  std::cout << *(paths[i].from) << " - " << *(paths[i].to) << " " << paths[i].weight << " " << paths[i].path.size() << std::endl;
+  for (int i(0); i < graph->size(); ++i) {
+    std::cout << *(paths[i].from) << " - " << *(paths[i].to) << " " << paths[i].weight << std::endl;
+    for (auto node : paths[i].path) {
+      std::cout << *node << " ";
+    }
+    std::cout << std::endl << std::endl;
+  }
+  // std::cout << *(paths[i].from) << " - " << *(paths[i].to) << " " << paths[i].weight << " " << paths[i].path.size() << std::endl;
 
   return 0;
 }
