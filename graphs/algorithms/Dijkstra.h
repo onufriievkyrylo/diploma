@@ -1,18 +1,21 @@
 #ifndef ABSTRACT_DIJKSTRA_H_
 #define ABSTRACT_DIJKSTRA_H_
 
-#include <vector>
-
 /**
  * @tparam V vertex type
  * @tparam E edge's weight type
  */
 template <class V, class E>
 struct DijkstraPath {
-  V* from;
-  V* to;
   E weight;
-  std::vector<V*> path;
+  V from;
+  V to;
+  V* path;
+  size_t path_length = 0;
+
+  ~DijkstraPath() {
+    delete[] path;
+  }
 };
 
 /**
