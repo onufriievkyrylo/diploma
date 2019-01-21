@@ -86,27 +86,28 @@ const Road roads[] = {
 int main() {
   auto graph = new MatrixGraph<std::string, double>();
   
-  const int cities_length = sizeof(cities) / sizeof(std::string);
-  for (int city_index(0); city_index < cities_length; ++city_index) {
-    graph->add(cities[city_index]);
+  for (const auto& city : cities) {
+    graph->add(city);
   }
 
-  const int roads_length = sizeof(roads) / sizeof(Road);
-  for (int road_index(0); road_index < roads_length; ++road_index) {
+  for (const auto& road : roads) {
     graph
-      ->connect(roads[road_index].from, roads[road_index].to, roads[road_index].distance)
-      ->connect(roads[road_index].to, roads[road_index].from, roads[road_index].distance);
+      ->connect(road.from, road.to, road.distance)
+      ->connect(road.to, road.from, road.distance);
   }
 
-  auto paths = graph->dijkstra_single_source("Kharkiv");
+  auto paths = graph->dijkstra_single_source("Lviv");
 
-  for (int i(0); i < graph->size(); ++i) {
-    std::cout << paths[i].from << " - " << paths[i].to << " " << paths[i].weight << std::endl;
-    for (int node_index(0); node_index < paths[i].path_length; ++node_index) {
-      std::cout << paths[i].path[node_index] << " ";
+  for (auto* path = paths; path != paths + graph->size(); ++path) {
+    std::cout << path->from << " - " << path->to << " " << path->weight << std::endl;
+    for (int node_index(0); node_index < path->sequence_length; ++node_index) {
+      std::cout << path->sequence[node_index] << " ";
     }
     std::cout << std::endl << std::endl;
   }
+
+  delete[] paths;
+  delete graph;
 
   return 0;
 }

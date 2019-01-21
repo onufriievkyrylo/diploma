@@ -10,11 +10,11 @@ struct DijkstraPath {
   E weight;
   V from;
   V to;
-  V* path;
-  size_t path_length = 0;
+  V* sequence = nullptr;
+  size_t sequence_length = 0;
 
   ~DijkstraPath() {
-    delete[] path;
+    delete[] sequence;
   }
 };
 

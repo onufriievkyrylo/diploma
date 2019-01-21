@@ -46,23 +46,21 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
       }
     }
     auto paths = new DijkstraPath<V, E>[vertex_count];
-    for (int to_index = 0; to_index < vertex_count; ++to_index) {
-      DijkstraPath<V, E> graph_path;
-      graph_path.from = verticies[source_index];
-      graph_path.to = verticies[to_index];
-      graph_path.weight = map[to_index].weight;
-      int from_index = map[to_index].source;
-      int path_length = 0;
-      while (from_index != source_index) {
-        from_index = map[from_index].source;
-        ++path_length;
+    for (int dest_index(0); dest_index < vertex_count; ++dest_index) {
+      paths[dest_index] = DijkstraPath<V, E>();
+      paths[dest_index].from = verticies[source_index];
+      paths[dest_index].to = verticies[dest_index];
+      paths[dest_index].weight = map[dest_index].weight;  
+      for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
+        ++paths[dest_index].sequence_length;
       }
-      graph_path.path_length = path_length;
-      graph_path.path = new V[path_length];
-      for (int node_index(map[to_index].source), step = 1; node_index != from_index; node_index = map[node_index].source, ++step) {
-        graph_path.path[path_length - step] = verticies[node_index];
+      if (paths[dest_index].sequence_length) {
+        paths[dest_index].sequence = new V[paths[dest_index].sequence_length]();
+        int node_index(paths[dest_index].sequence_length - 1);
+        for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
+          paths[dest_index].sequence[node_index--] = verticies[from_index];
+        }
       }
-      paths[to_index] = graph_path;
     }
     return paths;
   }
