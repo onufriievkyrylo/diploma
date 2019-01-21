@@ -96,7 +96,9 @@ int main() {
       ->connect(road.to, road.from, road.distance);
   }
 
-  auto paths = graph->dijkstra_single_source("Lviv");
+  std::string f = "Lviv";
+
+  auto paths = graph->dijkstra_single_source(f);
 
   for (auto* path = paths; path != paths + graph->size(); ++path) {
     std::cout << path->from << " - " << path->to << " " << path->weight << std::endl;

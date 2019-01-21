@@ -41,7 +41,7 @@ class AbstractDijkstra {
    * @param source graph vertex start position
    * @return array of all paths to source
    */
-  virtual DijkstraPath<V, E>* dijkstra_single_source(V source) = 0;
+  virtual DijkstraPath<V, E>* dijkstra_single_source(const V& source) = 0;
   /**
    * @params
    *  from, to - graph verticies beetwen path should be found

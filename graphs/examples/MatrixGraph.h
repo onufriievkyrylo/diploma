@@ -17,7 +17,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
   std::vector<V> verticies;
   std::vector<std::vector<std::optional<E>>> edges;
   public:
-  DijkstraPath<V, E>* dijkstra_single_source(V source) {
+  DijkstraPath<V, E>* dijkstra_single_source(const V& source) {
     size_t vertex_count = size();
     int source_index = index_of(source);
     if (source_index < 0)
@@ -64,7 +64,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     }
     return paths;
   }
-  MatrixGraph* add(V vertex) {
+  MatrixGraph* add(const V& vertex) {
     if (contains(vertex)) throw std::logic_error("vertex already added");
     verticies.push_back(vertex);
     for (auto &edge : edges) {
@@ -73,12 +73,12 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     edges.push_back(std::vector<std::optional<E>>(size(), std::optional<E>()));
     return this;
   }
-  MatrixGraph* remove(V vertex) {
+  MatrixGraph* remove(const V& vertex) {
     int removal_index = index_of(vertex);
     if (removal_index < 0) throw std::logic_error("vertex not found");
     return remove(removal_index);
   }
-  MatrixGraph* remove(int removal_index) {
+  MatrixGraph* remove(const int removal_index) {
     if (removal_index < 0 || removal_index >= size())
       throw std::out_of_range("index is out of range");
     verticies.erase(verticies.begin() + removal_index);
@@ -88,7 +88,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     }
     return this;
   }
-  MatrixGraph* connect(V vertex1, V vertex2, E edge) {
+  MatrixGraph* connect(const V& vertex1, const V& vertex2, const E& edge) {
     int vertex1_index = index_of(vertex1);
     if (vertex1_index < 0)
       throw std::logic_error("vertex1 not found");
@@ -98,7 +98,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     edges[vertex1_index][vertex2_index] = edge;
     return this;
   }
-  MatrixGraph* connect(int vertex1_index, int vertex2_index, E edge) {
+  MatrixGraph* connect(const int vertex1_index, const int vertex2_index, const E& edge) {
     if (vertex1_index < 0 || vertex1_index >= size())
       throw std::out_of_range("vertex1 index is out of range");
     if (vertex2_index < 0 || vertex2_index >= size())
@@ -106,7 +106,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     edges[vertex1_index][vertex2_index] = edge;
     return this;
   }
-  MatrixGraph* disconnect(V vertex1, V vertex2) {
+  MatrixGraph* disconnect(const V& vertex1, const V& vertex2) {
     int vertex1_index = index_of(vertex1);
     if (vertex1_index < 0)
       throw std::logic_error("vertex1 not found");
@@ -116,7 +116,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     edges[vertex1_index][vertex2_index].reset();
     return this;
   }
-  MatrixGraph* disconnect(int vertex1_index, int vertex2_index) {
+  MatrixGraph* disconnect(const int vertex1_index, const int vertex2_index) {
     if (vertex1_index < 0 || vertex1_index >= size())
       throw std::out_of_range("vertex1 index is out of range");
     if (vertex2_index < 0 || vertex2_index >= size())
@@ -124,10 +124,10 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     edges[vertex1_index][vertex2_index].reset();
     return this;
   }
-  bool contains(V vertex) {
+  bool contains(const V& vertex) {
     return std::find(verticies.begin(), verticies.end(), vertex) != verticies.end();
   }
-  int index_of(V vertex) {
+  int index_of(const V& vertex) {
     auto found = std::find(verticies.begin(), verticies.end(), vertex);
     return found != verticies.end() ? found - verticies.begin() : -1;
   }
