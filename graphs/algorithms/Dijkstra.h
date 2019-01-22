@@ -19,12 +19,12 @@ struct DijkstraPath {
 };
 
 /**
- * @tparam S source type
- * @tparam E edge's weight type
+ * @tparam V source vertex type
+ * @tparam E path weight type
  */
-template <class S, class E>
+template <class V, class E>
 struct DijkstraNode {
-  S source;
+  V source;
   E weight;
   bool visited = false;
   bool determined = false;
@@ -47,7 +47,7 @@ class AbstractDijkstra {
    * @param dest graph vertex finish position
    * @return paths from source to dest
    */
-  virtual DijkstraPath<V, E> dijkstra(const V& source const V& dest) = 0;
+  virtual DijkstraPath<V, E> dijkstra(const V& source, const V& dest) = 0;
 };
 
 #endif // ABSTRACT_DIJKSTRA_H_

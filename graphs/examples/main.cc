@@ -96,19 +96,29 @@ int main() {
       ->connect(road.to, road.from, road.distance);
   }
 
-  std::string f = "Lviv";
+  // Test edge case
+  // graph->add("Warszawa");
 
-  auto paths = graph->dijkstra_single_source(f);
+  // auto paths = graph->dijkstra("Lviv");
 
-  for (auto* path = paths; path != paths + graph->size(); ++path) {
-    std::cout << path->from << " - " << path->to << " " << path->weight << std::endl;
-    for (int node_index(0); node_index < path->sequence_length; ++node_index) {
-      std::cout << path->sequence[node_index] << " ";
-    }
-    std::cout << std::endl << std::endl;
+  // for (auto* path = paths; path != paths + graph->size(); ++path) {
+  //   std::cout << path->from << " - " << path->to << " " << path->weight << std::endl;
+  //   for (int node_index(0); node_index < path->sequence_length; ++node_index) {
+  //     std::cout << path->sequence[node_index] << " ";
+  //   }
+  //   std::cout << std::endl << std::endl;
+  // }
+
+
+  auto path = graph->dijkstra("Lviv", "Warszawa");
+
+  std::cout << path.from << " - " << path.to << " " << path.weight << std::endl;
+  for (int node_index(0); node_index < path.sequence_length; ++node_index) {
+    std::cout << path.sequence[node_index] << " ";
   }
+  std::cout << std::endl << std::endl;
 
-  delete[] paths;
+  // delete[] paths;
   delete graph;
 
   return 0;
