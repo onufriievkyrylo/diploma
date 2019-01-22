@@ -17,11 +17,11 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
   std::vector<V> verticies;
   std::vector<std::vector<std::optional<E>>> edges;
   public:
-  DijkstraPath<V, E>* dijkstra_single_source(const V& source) {
+  DijkstraPath<V, E>* dijkstra(const V& source) {
     size_t vertex_count = size();
     int source_index = index_of(source);
     if (source_index < 0)
-      throw std::logic_error("vertex 'from' not found");
+      throw std::logic_error("source vertex not found");
     std::vector<DijkstraNode<int, E>> map(vertex_count);
     map[source_index].source = source_index;
     map[source_index].determined = true;
@@ -50,7 +50,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
       paths[dest_index] = DijkstraPath<V, E>();
       paths[dest_index].from = verticies[source_index];
       paths[dest_index].to = verticies[dest_index];
-      paths[dest_index].weight = map[dest_index].weight;  
+      paths[dest_index].weight = map[dest_index].weight;
       for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
         ++paths[dest_index].sequence_length;
       }
@@ -63,6 +63,27 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
       }
     }
     return paths;
+  }
+  DijkstraPath<V, E> dijkstra(const V& source, const V& dest) {
+    size_t vertex_count = size();
+    int source_index = index_of(source);
+    if (source_index < 0)
+      throw std::logic_error("source vertex not found");
+    int dest_index = index_of(dest);
+    if (dest_index < 0)
+      throw std::logic_error("dest vertex not found");
+    std::vector<DijkstraNode<int, E>> map(vertex_count);
+    map[source_index].source = source_index;
+    map[source_index].determined = true;
+    for (int step = 0; step < vertex_count - 1; ++step) {
+      int min_index = std::distance(map.begin(), std::min_element(map.begin(), map.end(),
+        [](const DijkstraNode<int, E> &l, const DijkstraNode<int, E> &r) -> bool {
+          return l.visited || r.visited ? r.visited && !l.visited
+            : !l.determined || !r.determined ? !r.determined
+            : l.weight <= r.weight;
+        }
+      ));
+    }
   }
   MatrixGraph* add(const V& vertex) {
     if (contains(vertex)) throw std::logic_error("vertex already added");

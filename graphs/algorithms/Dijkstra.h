@@ -39,15 +39,15 @@ class AbstractDijkstra {
   public:
   /**
    * @param source graph vertex start position
-   * @return array of all paths to source
+   * @return array of all paths from source
    */
-  virtual DijkstraPath<V, E>* dijkstra_single_source(const V& source) = 0;
+  virtual DijkstraPath<V, E>* dijkstra(const V& source) = 0;
   /**
-   * @params
-   *  from, to - graph verticies beetwen path should be found
-   * @return array of verticies that present path or nullptr if path doesn't exist
+   * @param source graph vertex start position
+   * @param dest graph vertex finish position
+   * @return paths from source to dest
    */
-  // virtual V* dijkstra_double_source(V from, V to) = 0;
+  virtual DijkstraPath<V, E> dijkstra(const V& source const V& dest) = 0;
 };
 
 #endif // ABSTRACT_DIJKSTRA_H_
