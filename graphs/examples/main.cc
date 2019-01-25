@@ -97,26 +97,26 @@ int main() {
   }
 
   // Test edge case
-  // graph->add("Warszawa");
+  graph->add("Warszawa");
 
-  // auto paths = graph->dijkstra("Lviv");
+  auto paths = graph->dijkstra("Lviv");
 
-  // for (auto* path = paths; path != paths + graph->size(); ++path) {
-  //   std::cout << path->from << " - " << path->to << " " << path->weight << std::endl;
-  //   for (int node_index(0); node_index < path->sequence_length; ++node_index) {
-  //     std::cout << path->sequence[node_index] << " ";
-  //   }
-  //   std::cout << std::endl << std::endl;
-  // }
-
-
-  auto path = graph->dijkstra("Lviv", "Warszawa");
-
-  std::cout << path.from << " - " << path.to << " " << path.weight << std::endl;
-  for (int node_index(0); node_index < path.sequence_length; ++node_index) {
-    std::cout << path.sequence[node_index] << " ";
+  for (auto* path = paths; path != paths + graph->size(); ++path) {
+    std::cout << path->from << " - " << path->to << " " << path->weight << (path->unreachable ? " is unreachable" : "") << std::endl;
+    for (int node_index(0); node_index < path->sequence_length; ++node_index) {
+      std::cout << path->sequence[node_index] << " ";
+    }
+    std::cout << std::endl << std::endl;
   }
-  std::cout << std::endl << std::endl;
+
+
+  // auto path = graph->dijkstra("Lviv", "Warszawa");
+
+  // std::cout << path.from << " - " << path.to << " " << path.weight << (path.unreachable ? " is unreachable" : "") << std::endl;
+  // for (int node_index(0); node_index < path.sequence_length; ++node_index) {
+  //   std::cout << path.sequence[node_index] << " ";
+  // }
+  // std::cout << std::endl << std::endl;
 
   // delete[] paths;
   delete graph;

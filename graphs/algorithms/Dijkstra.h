@@ -12,6 +12,7 @@ struct DijkstraPath {
   V to;
   V* sequence = nullptr;
   size_t sequence_length = 0;
+  bool unreachable = false;
 
   ~DijkstraPath() {
     delete[] sequence;

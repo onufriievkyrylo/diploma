@@ -33,6 +33,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
             : l.weight <= r.weight;
         }
       ));
+      if (!map[min_index].determined) break;
       map[min_index].visited = true;
       for (int neighbour_index = 0; neighbour_index < vertex_count; ++neighbour_index) {
         if (edges[min_index][neighbour_index].has_value() && !map[neighbour_index].visited) {
@@ -51,15 +52,19 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
       paths[dest_index].from = verticies[source_index];
       paths[dest_index].to = verticies[dest_index];
       paths[dest_index].weight = map[dest_index].weight;
-      for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
-        ++paths[dest_index].sequence_length;
-      }
-      if (paths[dest_index].sequence_length) {
-        paths[dest_index].sequence = new V[paths[dest_index].sequence_length]();
-        int node_index(paths[dest_index].sequence_length - 1);
+      if (map[dest_index].visited) {
         for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
-          paths[dest_index].sequence[node_index--] = verticies[from_index];
+          ++paths[dest_index].sequence_length;
         }
+        if (paths[dest_index].sequence_length) {
+          paths[dest_index].sequence = new V[paths[dest_index].sequence_length]();
+          int node_index(paths[dest_index].sequence_length - 1);
+          for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
+            paths[dest_index].sequence[node_index--] = verticies[from_index];
+          }
+        }
+      } else {
+        paths[dest_index].unreachable = true;
       }
     }
     return paths;
@@ -83,7 +88,7 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
             : l.weight <= r.weight;
         }
       ));
-      if (min_index == dest_index) break;
+      if (min_index == dest_index || !map[min_index].determined) break;
       map[min_index].visited = true;
       for (int neighbour_index = 0; neighbour_index < vertex_count; ++neighbour_index) {
         if (edges[min_index][neighbour_index].has_value() && !map[neighbour_index].visited) {
@@ -100,15 +105,19 @@ class MatrixGraph : AbstractGraph<V, E>, AbstractDijkstra<V, E> {
     path.from = verticies[source_index];
     path.to = verticies[dest_index];
     path.weight = map[dest_index].weight;
-    for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
-      ++path.sequence_length;
-    }
-    if (path.sequence_length) {
-      path.sequence = new V[path.sequence_length]();
-      int node_index(path.sequence_length - 1);
+    if (map[dest_index].visited) {
       for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
-        path.sequence[node_index--] = verticies[from_index];
+        ++path.sequence_length;
       }
+      if (path.sequence_length) {
+        path.sequence = new V[path.sequence_length]();
+        int node_index(path.sequence_length - 1);
+        for (int from_index(map[dest_index].source); from_index != source_index; from_index = map[from_index].source) {
+          path.sequence[node_index--] = verticies[from_index];
+        }
+      }
+    } else {
+      path.unreachable = true;
     }
     return path;
   }
