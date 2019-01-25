@@ -108,6 +108,7 @@ int main() {
     }
     std::cout << std::endl << std::endl;
   }
+  delete[] paths;
 
 
   // auto path = graph->dijkstra("Lviv", "Warszawa");
@@ -118,7 +119,6 @@ int main() {
   // }
   // std::cout << std::endl << std::endl;
 
-  // delete[] paths;
   delete graph;
 
   return 0;
