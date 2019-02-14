@@ -99,7 +99,9 @@ int main() {
   // Test edge case
   graph->add("Warszawa");
 
-  auto paths = graph->dijkstra("Lviv");
+  auto map = graph->dijkstra("Lviv");
+
+  auto paths = map->path();
 
   for (auto* path = paths; path != paths + graph->size(); ++path) {
     std::cout << path->from << " - " << path->to << " " << path->weight << (path->unreachable ? " is unreachable" : "") << std::endl;
@@ -111,7 +113,7 @@ int main() {
   delete[] paths;
 
 
-  // auto path = graph->dijkstra("Lviv", "Warszawa");
+  // auto path = map->path("Luhansk");
 
   // std::cout << path.from << " - " << path.to << " " << path.weight << (path.unreachable ? " is unreachable" : "") << std::endl;
   // for (int node_index(0); node_index < path.sequence_length; ++node_index) {
