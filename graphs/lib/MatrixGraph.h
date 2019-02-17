@@ -19,6 +19,11 @@ class RoadMatrixGraph {
     bool visited = false;
   };
 
+  struct FloydWarshallNode {
+    int through_index = -1;
+    weight_t weight = std::numeric_limits<weight_t>::infinity();
+  };
+
   std::vector<vertex_t> verticies;
   std::vector<std::vector<weight_t>> edges;
   public:
@@ -36,7 +41,7 @@ class RoadMatrixGraph {
           return !l.visited && l.weight <= r.weight;
         }
       ));
-      if (map[min_index].weight == std::numeric_limits<weight_t>::infinity()) break;
+      if (map[min_index].visited) break;
       map[min_index].visited = true;
       for (int neighbour_index = 0; neighbour_index < vertex_count; ++neighbour_index) {
         if (!map[neighbour_index].visited && edges[min_index][neighbour_index] != std::numeric_limits<weight_t>::infinity()) {
@@ -80,6 +85,36 @@ class RoadMatrixGraph {
         }
       }
     }
+    return map;
+  }
+  std::vector<std::vector<FloydWarshallNode>> floyd_warshall() {
+    const size_t vertex_count = size();
+    std::vector<std::vector<FloydWarshallNode>> map(vertex_count);
+
+    for (int source_index(0); source_index < vertex_count; ++source_index) {
+      map[source_index] = std::vector<FloydWarshallNode>(vertex_count);
+      for (int dest_index(0); dest_index < vertex_count; ++dest_index) {
+        if (edges[source_index][dest_index] != std::numeric_limits<weight_t>::infinity()) {
+          map[source_index][dest_index].weight = edges[source_index][dest_index];
+          map[source_index][dest_index].through_index = dest_index;
+        }
+      }
+    }
+
+    for (int source_index(0); source_index < vertex_count; ++source_index) {
+      for (int throught_index(0); throught_index < vertex_count; ++throught_index) {
+        if (map[source_index][throught_index].weight != std::numeric_limits<weight_t>::infinity()) {
+          for (int dest_index(0); dest_index < vertex_count; ++dest_index) {
+            weight_t weight = map[source_index][throught_index].weight + map[throught_index][dest_index].weight;
+            if (map[source_index][dest_index].weight > weight) {
+              map[source_index][dest_index].weight = weight;
+              map[source_index][dest_index].through_index = map[source_index][throught_index].through_index;
+            }
+          }
+        }
+      }
+    }
+
     return map;
   }
   RoadMatrixGraph* add(const vertex_t& vertex) {

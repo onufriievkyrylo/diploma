@@ -43,7 +43,9 @@ void dijkstra(RoadMatrixGraph* graph, const std::string& source) {
   int source_index = graph->index_of(source);
 
   for (int dest_index(0); dest_index < graph->size(); ++dest_index) {
-    if (map[dest_index].visited) {
+    if (source_index == dest_index) {
+      continue;
+    } else if (map[dest_index].visited) {
       std::cout << "Distance from " << source << " to " << graph->get_vertex(dest_index) << " is " << map[dest_index].weight << "km." << std::endl;
       auto sequence = new int[graph->size()];
       int sequence_length = 0;
@@ -69,8 +71,31 @@ void dijkstra(RoadMatrixGraph* graph, const std::string& source) {
   }
 }
 
-void floyd_warshall(RoadMatrixGraph* graph, const std::string& source, const std::string& dest) {
-
+void floyd_warshall(RoadMatrixGraph* graph) {
+  auto map = graph->floyd_warshall();
+  for (int source_index(0); source_index < graph->size(); ++source_index) {
+    int source_index = 1;
+    for (int dest_index(0); dest_index < graph->size(); ++dest_index) {
+      if (source_index == dest_index) {
+        continue;
+      } else if (map[source_index][dest_index].through_index >= 0) {
+        std::cout << "Distance from " << graph->get_vertex(source_index) << " to " << graph->get_vertex(dest_index) << " is " << map[source_index][dest_index].weight << "km." << std::endl;
+        if (map[source_index][dest_index].through_index != dest_index) {
+          std::cout << "Pass through: ";
+          for (int through_index = map[source_index][dest_index].through_index; through_index != dest_index; through_index = map[through_index][dest_index].through_index) {
+            std::cout << graph->get_vertex(through_index);
+            if (map[through_index][dest_index].through_index != dest_index) {
+              std::cout << ", ";
+            } else {
+              std::cout << std::endl;
+            }
+          }
+        }
+      } else {
+        std::cout << graph->get_vertex(dest_index) << " is unreachable from " << graph->get_vertex(source_index) << std::endl;
+      }
+    }
+  }
 }
 
 int main() {
@@ -99,13 +124,13 @@ int main() {
   // graph->print();
 
   // Dijkstra test source only
-  dijkstra(graph, "Lviv");
+  // dijkstra(graph, "Lviv");
 
   // Dijkstra test source and dest
-  dijkstra(graph, "Lviv", "Kharkiv");
+  // dijkstra(graph, "Kharkiv", "Luhansk");
 
   // Floyd-Warshall test
-  floyd_warshall(graph, "Lviv", "Kharkiv");
+  // floyd_warshall(graph);
 
   delete graph;
 
