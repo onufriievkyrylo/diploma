@@ -1,8 +1,10 @@
 #ifndef FLOYD_WARSHALL_H_
 #define FLOYD_WARSHALL_H_
 
+#include <string>
 #include <limits>
 #include <algorithm>
+#include <iostream>
 
 namespace floyd_warshall {
 

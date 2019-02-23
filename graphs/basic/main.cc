@@ -5,6 +5,9 @@
 
 #include "./lib/dijkstra.h"
 #include "./lib/floyd_warshall.h"
+#include "./lib/prim.h"
+#include "./lib/depth_first_search.h"
+#include "./lib/breadth_first_search.h"
 
 inline const size_t vertex_count = 25;
 
@@ -39,24 +42,39 @@ int main() {
   }
   roads.close();
 
-  for (int i(0); i < vertex_count; ++i) {
-    for (int j(0); j < vertex_count; ++j) {
-      if (edges[i][j] != std::numeric_limits<weight_t>::infinity())
-      std::cout << verticies[i] << " - " << verticies[j] << " is " << edges[i][j] << " km." << std::endl;
-    }
-  }
+  // Print graph
+  // for (int i(0); i < vertex_count; ++i) {
+  //   for (int j(0); j < vertex_count; ++j) {
+  //     if (edges[i][j] != std::numeric_limits<weight_t>::infinity())
+  //     std::cout << verticies[i] << " - " << verticies[j] << " is " << edges[i][j] << " km." << std::endl;
+  //   }
+  // }
 
   // Dijkstra test source only
   // auto map = dijkstra::dijkstra(verticies, edges, vertex_count, "Lviv");
   // dijkstra::print(verticies, vertex_count, map, "Lviv");
+  // delete[] map;
 
   // Dijkstra test source and dest
-  auto map = dijkstra::dijkstra(verticies, edges, vertex_count, "Lviv", "Kharkiv");
-  dijkstra::print(verticies, vertex_count, map, "Lviv", "Kharkiv");
+  // auto map = dijkstra::dijkstra(verticies, edges, vertex_count, "Lviv", "Kharkiv");
+  // dijkstra::print(verticies, vertex_count, map, "Lviv", "Kharkiv");
+  // delete[] map;
 
   // Floyd-Warshall test
   // auto map = floyd_warshall::floyd_warshall(verticies, edges, vertex_count);
   // floyd_warshall::print(verticies, vertex_count, map);
+  // delete[] map;
+
+  // Prim test
+  // auto map = prim::prim(verticies, edges, vertex_count, "Kharkiv");
+  // prim::print(verticies, vertex_count, map, "Kharkiv");
+  // delete[] map;
+
+  // Depth-first search test
+  // dfs::search(verticies, edges, vertex_count, "Kharkiv");
+
+  // Breadth-first search test
+  // bfs::search(verticies, edges, vertex_count, "Kharkiv");
 
   return 0;
 }

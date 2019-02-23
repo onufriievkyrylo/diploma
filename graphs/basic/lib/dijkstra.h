@@ -1,8 +1,10 @@
 #ifndef DIJKSTRA_H_
 #define DIJKSTRA_H_
 
+#include <string>
 #include <limits>
 #include <algorithm>
+#include <iostream>
 
 namespace dijkstra {
 
@@ -24,11 +26,10 @@ Node* dijkstra(vertex_t* verticies, weight_t** edges, const size_t& vertex_count
     throw std::logic_error("dest vertex not found");
   auto map = new Node[vertex_count];
   map[source_index].weight = 0;
-  map[source_index].source_index = source_index;
   for (int step(0); step < vertex_count - 1; ++step) {
     int min_index = std::distance(map, std::min_element(map, map + vertex_count,
       [](const Node &l, const Node &r) -> bool {
-        return !l.visited && l.weight <= r.weight;
+        return !l.visited && l.weight < r.weight;
       }
     ));
     if (map[min_index].visited) break;
@@ -53,11 +54,10 @@ Node* dijkstra(vertex_t* verticies, weight_t** edges, const size_t& vertex_count
     throw std::logic_error("source vertex not found");
   auto map = new Node[vertex_count];
   map[source_index].weight = 0;
-  map[source_index].source_index = source_index;
   for (int step(0); step < vertex_count - 1; ++step) {
     int min_index = std::distance(map, std::min_element(map, map + vertex_count,
       [](const Node &l, const Node &r) -> bool {
-        return !l.visited && l.weight <= r.weight;
+        return !l.visited && l.weight < r.weight;
       }
     ));
     if (map[min_index].visited) break;
