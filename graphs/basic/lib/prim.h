@@ -2,33 +2,33 @@
 #define PRIM_H_
 
 #include <string>
-#include <limits>
-#include <algorithm>
 #include <iostream>
 
-namespace prim {
+#include "./utils.h"
 
-typedef std::string vertex_t;
-typedef double weight_t;
-
-struct Node {
+struct PrimNode {
   int source_index;
-  weight_t weight = std::numeric_limits<weight_t>::infinity();
+  weight_t weight = INFINITY;
   bool visited = false;
 };
 
-Node* prim(vertex_t* verticies, weight_t** edges, const size_t& vertex_count, const vertex_t& source) {
-  int source_index = std::distance(verticies, std::find(verticies, verticies + vertex_count, source));
+PrimNode* prim(vertex_t* verticies, weight_t** edges, const int& vertex_count, const vertex_t& source) {
+  int source_index = get_vertex_index(verticies, verticies + vertex_count, source);
   if (source_index == vertex_count)
     throw std::logic_error("source vertex not found");
-  auto map = new Node[vertex_count];
+  auto map = new PrimNode[vertex_count];
+  for (int node_index(0); node_index < vertex_count; ++node_index) {
+    map[node_index].visited = false;
+    map[node_index].weight = INFINITY;
+  }
   map[source_index].weight = 0;
   for (int step(0); step < vertex_count - 1; ++step) {
-    int min_index = std::distance(map, std::min_element(map, map + vertex_count,
-      [](const Node &l, const Node &r) -> bool {
-        return !l.visited && l.weight < r.weight;
+    int min_index = 0;
+    for (int node_index(1); node_index < vertex_count; ++node_index) {
+      if (map[min_index].visited || !map[node_index].visited && map[node_index].weight < map[min_index].weight) {
+        min_index = node_index;
       }
-    ));
+    }
     if (map[min_index].visited) break;
     map[min_index].visited = true;
     for (int neighbour_index = 0; neighbour_index < vertex_count; ++neighbour_index) {
@@ -41,20 +41,18 @@ Node* prim(vertex_t* verticies, weight_t** edges, const size_t& vertex_count, co
   return map;
 }
 
-void print(vertex_t* verticies, const size_t& vertex_count, Node* map, const int& source_index) {
+void prim_print(vertex_t* verticies, const int& vertex_count, PrimNode* map, const int& source_index) {
   for (int vertex_index(0); vertex_index < vertex_count; ++vertex_index) {
     if (map[vertex_index].source_index == source_index) {
       std::cout << verticies[map[vertex_index].source_index] << " -> " << verticies[vertex_index] << std::endl;
-      print(verticies, vertex_count, map, vertex_index);
+      prim_print(verticies, vertex_count, map, vertex_index);
     }
   }
 }
 
-void print(vertex_t* verticies, const size_t& vertex_count, Node* map, const vertex_t& source) {
-  int source_index = std::distance(verticies, std::find(verticies, verticies + vertex_count, source));
-  print(verticies, vertex_count, map, source_index);
-}
-
+void prim_print(vertex_t* verticies, const int& vertex_count, PrimNode* map, const vertex_t& source) {
+  int source_index = get_vertex_index(verticies, verticies + vertex_count, source);
+  prim_print(verticies, vertex_count, map, source_index);
 }
 
 #endif // PRIM_H_

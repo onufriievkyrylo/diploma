@@ -2,36 +2,33 @@
 #define FLOYD_WARSHALL_H_
 
 #include <string>
-#include <limits>
-#include <algorithm>
 #include <iostream>
 
-namespace floyd_warshall {
+#include "./utils.h"
 
-typedef std::string vertex_t;
-typedef double weight_t;
-
-struct Node {
+struct FloydWarshalNode {
   int through_index = -1;
-  weight_t weight = std::numeric_limits<weight_t>::infinity();
+  weight_t weight = INFINITY;
 };
 
-Node** floyd_warshall(vertex_t* verticies, weight_t** edges, const size_t& vertex_count) {
-  auto map = new Node*[vertex_count];
+FloydWarshalNode** floyd_warshall(vertex_t* verticies, weight_t** edges, const int& vertex_count) {
+  auto map = new FloydWarshalNode*[vertex_count];
 
   for (int source_index(0); source_index < vertex_count; ++source_index) {
-    map[source_index] = new Node[vertex_count];
+    map[source_index] = new FloydWarshalNode[vertex_count];
     for (int dest_index(0); dest_index < vertex_count; ++dest_index) {
-      if (edges[source_index][dest_index] != std::numeric_limits<weight_t>::infinity()) {
+      if (edges[source_index][dest_index] != INFINITY) {
         map[source_index][dest_index].weight = edges[source_index][dest_index];
         map[source_index][dest_index].through_index = dest_index;
+      } else {
+        map[source_index][dest_index].weight = INFINITY;
       }
     }
   }
 
   for (int source_index(0); source_index < vertex_count; ++source_index) {
     for (int throught_index(0); throught_index < vertex_count; ++throught_index) {
-      if (map[source_index][throught_index].weight != std::numeric_limits<weight_t>::infinity()) {
+      if (map[source_index][throught_index].weight != INFINITY) {
         for (int dest_index(0); dest_index < vertex_count; ++dest_index) {
           weight_t weight = map[source_index][throught_index].weight + map[throught_index][dest_index].weight;
           if (map[source_index][dest_index].weight > weight) {
@@ -46,7 +43,7 @@ Node** floyd_warshall(vertex_t* verticies, weight_t** edges, const size_t& verte
   return map;
 }
 
-void print(vertex_t* verticies, const size_t& vertex_count, Node** map) {
+void floyd_warshall_print(vertex_t* verticies, const int& vertex_count, FloydWarshalNode** map) {
   for (int source_index(0); source_index < vertex_count; ++source_index) {
     for (int dest_index(0); dest_index < vertex_count; ++dest_index) {
       if (source_index == dest_index) {
@@ -69,8 +66,6 @@ void print(vertex_t* verticies, const size_t& vertex_count, Node** map) {
       }
     }
   }
-}
-
 }
 
 #endif // FLOYD_WARSHALL_H_

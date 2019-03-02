@@ -2,17 +2,12 @@
 #define BREADTH_FIRS_SEARC_H_
 
 #include <string>
-#include <limits>
-#include <algorithm>
 #include <iostream>
 
-namespace bfs {
+#include "./utils.h"
 
-typedef std::string vertex_t;
-typedef double weight_t;
-
-void search(vertex_t* verticies, weight_t** edges, const size_t& vertex_count, const vertex_t& source) {
-  int source_index = std::distance(verticies, std::find(verticies, verticies + vertex_count, source));
+void breadth_search(vertex_t* verticies, weight_t** edges, const int& vertex_count, const vertex_t& source) {
+  int source_index = get_vertex_index(verticies, verticies + vertex_count, source);
   auto visited = new bool[vertex_count];
   auto levels = new int[vertex_count];
   auto queue = new int[vertex_count];
@@ -26,7 +21,7 @@ void search(vertex_t* verticies, weight_t** edges, const size_t& vertex_count, c
     int level = levels[source_index];
     std::cout << std::string(level, '=') << verticies[source_index] << std::endl;
     for (int dest_index(0); dest_index < vertex_count; ++dest_index) {
-      if (!visited[dest_index] && edges[source_index][dest_index] < std::numeric_limits<weight_t>::infinity()) {
+      if (!visited[dest_index] && edges[source_index][dest_index] < INFINITY) {
         visited[dest_index] = true;
         levels[dest_index] = level + 1;
         queue[queue_back++] = dest_index;
@@ -36,8 +31,6 @@ void search(vertex_t* verticies, weight_t** edges, const size_t& vertex_count, c
   delete[] levels;
   delete[] visited;
   delete[] queue;
-}
-
 }
 
 #endif // BREADTH_FIRS_SEARC_H_
