@@ -2,21 +2,41 @@
 
 #include "./lib/binary_search_tree.h"
 #include "./lib/avl_tree.h"
-
+#include "./lib/red_black_tree.h"
 
 int main() {
-  AVLTreeNode* root = new AVLTreeNode(0);
+  std::cout << "----Red-Black----" << std::endl << std::endl;
+  RedBlackTreeNode* rb_root = nullptr;
 
-  root = avl_add(root, -20);
-  root = avl_add(root, -2);
-  root = avl_add(root, -15);
-  root = avl_add(root, 2);
-  root = avl_add(root, 15);
-  root = avl_add(root, 20);
+  rb_add(rb_root, 0);
+  rb_add(rb_root, -2);
+  rb_add(rb_root, -20);
+  rb_add(rb_root, -15);
+  rb_add(rb_root, 2);
+  rb_add(rb_root, 15);
+  rb_add(rb_root, 20);
+  rb_add(rb_root, 21);
 
-  // root = remove(root, 0);
+  rb_remove(rb_root, 0);
 
-  avl_depth_search(root);
+  rb_depth_search(rb_root);
+
+  std::cout << "----AVL----" << std::endl << std::endl;
+
+  AVLTreeNode* avl_root = nullptr;
+
+  avl_add(avl_root, 0);
+  avl_add(avl_root, -2);
+  avl_add(avl_root, -20);
+  avl_add(avl_root, -15);
+  avl_add(avl_root, 2);
+  avl_add(avl_root, 15);
+  avl_add(avl_root, 20);
+  avl_add(avl_root, 21);
+
+  avl_remove(avl_root, 0);
+
+  avl_depth_search(avl_root);
 
   return 0;
 }

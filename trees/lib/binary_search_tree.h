@@ -15,28 +15,32 @@ struct BinaryTreeNode {
   }
 };
 
-BinaryTreeNode* get_min_node(BinaryTreeNode* root) {
-  return root->left ? get_min_node(root->left) : root;
+BinaryTreeNode* bst_get_min_node(BinaryTreeNode* root) {
+  return root->left ? bst_get_min_node(root->left) : root;
 }
 
-BinaryTreeNode* add(BinaryTreeNode* root, const data_t& data) {
+BinaryTreeNode* bst_internal_add(BinaryTreeNode* root, const data_t& data) {
   if (root == nullptr) {
     return new BinaryTreeNode(data);
   } else if (root->data > data) {
-    root->right = add(root->right, data);
+    root->right = bst_internal_add(root->right, data);
   } else if (root->data < data) {
-    root->left = add(root->left, data);
+    root->left = bst_internal_add(root->left, data);
   }
   return root;
 }
 
-BinaryTreeNode* remove(BinaryTreeNode* root, const data_t& data) {
+void bst_add(BinaryTreeNode* &root, const data_t& data) {
+  root = bst_internal_add(root, data);
+}
+
+BinaryTreeNode* bst_internal_remove(BinaryTreeNode* root, const data_t& data) {
   if (root == nullptr) {
     return root;
   } else if (root->data > data) {
-    root->right = remove(root, data);
+    root->right = bst_internal_remove(root, data);
   } else if (root->data < data) {
-    root->left = remove(root->left, data);
+    root->left = bst_internal_remove(root->left, data);
   } else {
     if (root->left == nullptr) {
       BinaryTreeNode* temp = root->right;
@@ -47,13 +51,17 @@ BinaryTreeNode* remove(BinaryTreeNode* root, const data_t& data) {
       delete root;
       return temp;
     }
-    BinaryTreeNode* temp = get_min_node(root->right);
+    BinaryTreeNode* temp = bst_get_min_node(root->right);
     root->data = temp->data;
-    root->right = remove(root->right, temp->data);
+    root->right = bst_internal_remove(root->right, temp->data);
   }
 }
 
-void breadth_search(BinaryTreeNode* root) {
+void bst_remove(BinaryTreeNode* &root, const data_t& data) {
+  root = bst_internal_remove(root, data);
+}
+
+void bst_breadth_search(BinaryTreeNode* root) {
   const int max_queue_size = 500;
   int queue_front = 0;
   int queue_back = 0;
@@ -77,13 +85,13 @@ void breadth_search(BinaryTreeNode* root) {
   delete[] queue;
 }
 
-void depth_search(BinaryTreeNode* root, int level = 1) {
+void bst_depth_search(BinaryTreeNode* root, int level = 1) {
   if (root->left) {
-    depth_search(root->left, level + 1);
+    bst_depth_search(root->left, level + 1);
   }
   std::cout << std::string(level, '=') << " " << root->data << std::endl;
   if (root->right) {
-    depth_search(root->right, level + 1);
+    bst_depth_search(root->right, level + 1);
   }
 }
 

@@ -13,7 +13,7 @@ struct AVLTreeNode {
   }
 };
 
-int fix_height(AVLTreeNode* root) {
+int avl_fix_height(AVLTreeNode* root) {
   int right_height = root->right ? root->right->height : 0;
   int left_height = root->left ? root->left->height : 0;
   if (right_height > left_height) {
@@ -23,7 +23,7 @@ int fix_height(AVLTreeNode* root) {
   }
 }
 
-int factor(AVLTreeNode* root) {
+int avl_get_factor(AVLTreeNode* root) {
   return (root->right ? root->right->height : 0) - (root->left ? root->left->height : 0);
 }
 
@@ -35,8 +35,8 @@ AVLTreeNode* avl_rotate_right(AVLTreeNode* root) {
   AVLTreeNode* temp = root->left;
   root->left = temp->right;
   temp->right = root;
-  fix_height(root);
-  fix_height(temp);
+  avl_fix_height(root);
+  avl_fix_height(temp);
   return temp;
 }
 
@@ -44,20 +44,20 @@ AVLTreeNode* avl_rotate_left(AVLTreeNode* root) {
   AVLTreeNode* temp = root->right;
   root->right = temp->left;
   temp->left = root;
-  fix_height(root);
-  fix_height(temp);
+  avl_fix_height(root);
+  avl_fix_height(temp);
   return temp;
 }
 
 AVLTreeNode* avl_balance(AVLTreeNode* root) {
-  fix_height(root);
-  if (factor(root) == 2) {
-    if (factor(root->right) < 0) {
+  avl_fix_height(root);
+  if (avl_get_factor(root) == 2) {
+    if (avl_get_factor(root->right) < 0) {
       root->right = avl_rotate_right(root->right);
     }
     return avl_rotate_left(root);
-  } else if (factor(root) == -2) {
-    if (factor(root->left) > 0) {
+  } else if (avl_get_factor(root) == -2) {
+    if (avl_get_factor(root->left) > 0) {
       root->left = avl_rotate_left(root->left);
     }
     return avl_rotate_right(root);
@@ -75,23 +75,26 @@ AVLTreeNode* avl_remove_min(AVLTreeNode* root) {
   return avl_balance(root);
 }
 
-AVLTreeNode* avl_add(AVLTreeNode* root, const data_t& data) {
+AVLTreeNode* avl_internal_add(AVLTreeNode* &root, const data_t& data) {
   if (root == nullptr) {
     return new AVLTreeNode(data);
   } else if (data > root->data) {
-    root->right = avl_add(root->right, data);
+    root->right = avl_internal_add(root->right, data);
   } else if (data < root->data) {
-    root->left = avl_add(root->left, data);
+    root->left = avl_internal_add(root->left, data);
   }
-  return root;
-  // return avl_balance(root);
+  return avl_balance(root);
 }
 
-AVLTreeNode* avl_remove(AVLTreeNode* root, const data_t& data) {
+void avl_add(AVLTreeNode* &root, const data_t& data) {
+  root = avl_internal_add(root, data);
+}
+
+AVLTreeNode* avl_internal_remove(AVLTreeNode* &root, const data_t& data) {
   if (data > root->data) {
-    root->right = avl_remove(root->right, data);
+    root->right = avl_internal_remove(root->right, data);
   } else if (data < root->data) {
-    root->left = avl_remove(root->left, data);
+    root->left = avl_internal_remove(root->left, data);
   } else {
     if (!root->right) return root->right;
     AVLTreeNode* temp = avl_get_min_node(root->right);
@@ -101,6 +104,10 @@ AVLTreeNode* avl_remove(AVLTreeNode* root, const data_t& data) {
     return avl_balance(temp);
   }
   return avl_balance(root);
+}
+
+void avl_remove(AVLTreeNode* &root, const data_t& data) {
+  root = avl_internal_remove(root, data);
 }
 
 void avl_breadth_search(AVLTreeNode* root) {
